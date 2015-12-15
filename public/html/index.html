@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> posX </title>
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <script src="../js/jquery-1.11.1.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/underscore.js"></script>
+    <style>
+        #canvas {
+            background-color: #ffff00;
+        }
+    </style>
+</head>
+
+<body>
+<div id="div">touchX</div>
+<canvas id="canvas" height="500" width="500"></canvas>
+</body>
+
+<script type="text/javascript">
+    var socket = io();
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+
+    var logCounter = 0;
+
+    $('#canvas').on("touchmove", _.throttle(function (ev) {
+        var e = ev.originalEvent;
+        var posX = logCounter + " : " + e.targetTouches[0].pageX;
+        $('#div').text(posX);
+        socket.emit('position', posX);
+        logCounter++;
+        return false;
+    }, 500));
+</script>
+</html>
